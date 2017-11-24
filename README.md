@@ -17,7 +17,9 @@ module.exports = {
 ```
 
 We are importing the db module directly, and we therefore depend on it’s location on disk,
-and on that particular implementation. Therefore this module is not testable. And we can do better.
+and on that particular implementation. Therefore this module is not testable.
+
+We can do better:
 
 ```js
 const db = require('../databaseConnector');
