@@ -15,7 +15,8 @@ const getAllMethodNames = (instanceObject) => {
                 typeof _obj[name] === 'function' &&         // only the methods
                 name !== 'constructor' &&                   // not the constructor
                 (index == 0 || name !== arr[index - 1]) &&  // not overriding in this prototype
-                _props.indexOf(name) === -1                 // not overridden in a child
+                _props.indexOf(name) === -1 &&              // not overridden in a child
+                name.startsWith('_') === false              // do not export private methods
             );
         _props = _props.concat(currentMethods);
         _obj = Object.getPrototypeOf(_obj);                 // walk-up the prototype chain

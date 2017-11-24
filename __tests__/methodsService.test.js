@@ -26,6 +26,16 @@ class ChildClass extends SimpleClass {
     }
 }
 
+class ChildClassWithPrivates extends SimpleClass {
+    constructor(serviceA, serviceB) {
+        super(serviceA, serviceB);
+    }
+
+    _metodPrivate() {
+        return 'shouldn\'t be exported';
+    }
+}
+
 const _serviceA = {
     toString() {
         return 1;
@@ -48,6 +58,11 @@ describe('methodsService', () => {
         it('should return methods of parent class as well', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
             expect(getAllMethodNames(childClass)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
+        });
+
+        it('should not provide private methods', () => {
+            const privateClass = new ChildClassWithPrivates(_serviceA, _serviceB);
+            expect(getAllMethodNames(privateClass)).to.deep.equal(['methodA', 'methodB']);
         });
     });
 
