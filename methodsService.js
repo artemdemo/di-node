@@ -39,7 +39,24 @@ const exportPublicMethods = (instanceObject) => {
     }, {});
 }
 
+/**
+ * 
+ * @param {*} dependencies 
+ */
+const exportClass = (...dependencies) => (OriginalClass) => {
+    const classInstance = (() => {
+        if (dependencies.length === 1 && Array.isArray(dependencies[0]) && dependencies[0].length > 0) {
+            return new OriginalClass(...dependencies[0]);
+        } else if (dependencies.length > 0) {
+            return new OriginalClass(...dependencies);
+        }
+        return new OriginalClass();
+    })();
+    return exportPublicMethods(classInstance);
+}
+
 module.exports = {
     getAllMethodNames,
     exportPublicMethods,
+    exportClass,
 };

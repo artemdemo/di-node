@@ -1,3 +1,5 @@
-## Dependenci Injections
+## Dependency Injection for NodeJS
 
-Experiments with dependenci injections
+Experiments with dependency injections for NodeJS.
+
+

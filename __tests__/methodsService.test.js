@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { getAllMethodNames, exportPublicMethods } = require('../methodsService');
+const { getAllMethodNames, exportPublicMethods, exportClass } = require('../methodsService');
 
 class SimpleClass {
     constructor(serviceA, serviceB) {
@@ -63,5 +63,27 @@ describe('methodsService', () => {
             const methodsObject = exportPublicMethods(childClass);
             expect(methodsObject.methodA()).to.equal(1);
         });
+    });
+
+    describe('exportClass', () => {
+        it('should export class with given dependencies', () => {
+            const methodsObject = exportClass(
+                _serviceA,
+                _serviceB
+            )(ChildClass);
+
+            expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
+            expect(methodsObject.methodB()).to.equal(2);
+        });
+
+        it('dependencies could be provided as Array', () => {
+            const methodsObject = exportClass([
+                _serviceA,
+                _serviceB,
+            ])(ChildClass);
+
+            expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
+            expect(methodsObject.methodB()).to.equal(2);
+        })
     });
 });
