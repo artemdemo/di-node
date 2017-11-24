@@ -2,8 +2,9 @@
  * Return array of method names of given class instane
  * 
  * @source https://stackoverflow.com/a/35033472
- * @param {Object} instanceObject - some class instane
  * @private
+ * @param {Object} instanceObject - some class instane
+ * @returns {Array}
  */
 const _getAllMethodNames = (instanceObject) => {
     let _props = [];
@@ -32,8 +33,9 @@ const _getAllMethodNames = (instanceObject) => {
 /**
  * Return object with methods of given class instance
  * 
- * @param {Object} instanceObject - some class instane
  * @private
+ * @param {Object} instanceObject - some class instane
+ * @returns {Object}
  */
 const _exportPublicMethods = (instanceObject) => {
     const methodsList = _getAllMethodNames(instanceObject);
@@ -44,13 +46,29 @@ const _exportPublicMethods = (instanceObject) => {
 }
 
 /**
+ * Checks if given varibale is a class
+ * 
+ * @link https://stackoverflow.com/a/30760236
+ * @param {*} v 
+ * @return {Boolean}
+ */
+function isClass(v) {
+    const es6Class = /^\s*class\s+/.test(v.toString());
+    const es5BabelClass = /_class\S+/i.test(v.toString());
+    return typeof v === 'function' && (es6Class || es5BabelClass);
+}
+
+/**
  * Accepts list of dependencies and constructor function (class)
  * and returns object with methods
  *
- * @param {*} dependencies
  * @public
+ * @param {*} dependencies
  */
 const exportClass = (...dependencies) => (OriginalClass) => {
+    if (!isClass(OriginalClass)) {
+        throw new Error(`exportClass expects class, instead "${typeof OriginalClass}" given`);
+    }
     const classInstance = (() => {
         if (dependencies.length === 1 && Array.isArray(dependencies[0]) && dependencies[0].length > 0) {
             return new OriginalClass(...dependencies[0]);

@@ -49,33 +49,33 @@ const _serviceB = {
 }
 
 describe('methodsService', () => {
-    describe('getAllMethodNames', () => {
+    describe('_getAllMethodNames', () => {
         it('should return list of methods (only) for simple class', () => {
             const simpleClass = new SimpleClass(_serviceA, _serviceB);
-            expect(getAllMethodNames(simpleClass)).to.deep.equal(['methodA', 'methodB']);
+            expect(_getAllMethodNames(simpleClass)).to.deep.equal(['methodA', 'methodB']);
         });
 
         it('should return methods of parent class as well', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
-            expect(getAllMethodNames(childClass)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
+            expect(_getAllMethodNames(childClass)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
         });
 
         it('should not provide private methods', () => {
             const privateClass = new ChildClassWithPrivates(_serviceA, _serviceB);
-            expect(getAllMethodNames(privateClass)).to.deep.equal(['methodA', 'methodB']);
+            expect(_getAllMethodNames(privateClass)).to.deep.equal(['methodA', 'methodB']);
         });
     });
 
-    describe('exportPublicMethods', () => {
+    describe('_exportPublicMethods', () => {
         it('should return object with methods of given instance', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
-            const methodsObject = exportPublicMethods(childClass);
+            const methodsObject = _exportPublicMethods(childClass);
             expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
         });
 
         it('method should operate in the conetext of original class', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
-            const methodsObject = exportPublicMethods(childClass);
+            const methodsObject = _exportPublicMethods(childClass);
             expect(methodsObject.methodA()).to.equal(1);
         });
     });
@@ -100,5 +100,11 @@ describe('methodsService', () => {
             expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
             expect(methodsObject.methodB()).to.equal(2);
         })
+
+        it('should throw an error if not class given', () => {
+            const badClass = function() {};
+
+            expect(() => exportClass()(badClass)).to.throw();
+        });
     });
 });
