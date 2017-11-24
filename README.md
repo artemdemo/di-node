@@ -30,6 +30,11 @@ class ProjectsModelClass {
         this.db = db;
     }
 
+    // This method will be private and wouldn't be exported via "exportClass"
+    _privateMethod() {
+
+    }
+
     getProjects() {
         return db.query('select * from projects');
     }
