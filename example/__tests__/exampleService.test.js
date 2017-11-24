@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const { ExampleServiceClass } = require('../exampleService');
-const { exportClass } = require('../../methodsService');
+const { exportClass } = require('../../di');
 
 const tokenMock = {
     generateToken() {

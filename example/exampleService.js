@@ -1,4 +1,4 @@
-const { exportClass } = require('../methodsService');
+const { exportClass } = require('../di');
 const token = require('./dependencyService');
 
 class ExampleServiceClass {

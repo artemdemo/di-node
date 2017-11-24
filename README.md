@@ -21,7 +21,7 @@ and on that particular implementation. Therefore this module is not testable. An
 
 ```js
 const db = require('../databaseConnector');
-const { exportClass } = require('../../methodsService');
+const { exportClass } = require('../../di');
 
 class ProjectsModelClass {
     constructor(db) {
@@ -43,7 +43,7 @@ And then write proper test:
 
 ```js
 const { expect } = require('chai');
-const { exportClass } = require('../../methodsService');
+const { exportClass } = require('../../di');
 const { ProjectsModelClass } = require('../projectsModel');
 
 const projectsList = [
