@@ -33,9 +33,9 @@ const getAllMethodNames = (instanceObject) => {
  */
 const exportPublicMethods = (instanceObject) => {
     const methodsList = getAllMethodNames(instanceObject);
-    const result = {};
-    return methodsList.reduce((name, acc) => {
+    return methodsList.reduce((acc, name) => {
         acc[name] = instanceObject[name].bind(instanceObject);
+        return acc;
     }, {});
 }
 

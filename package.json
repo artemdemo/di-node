@@ -1,0 +1,15 @@
+{
+  "name": "dinode",
+  "version": "1.0.0",
+  "description": "Experiments with dependenci injections",
+  "main": "null",
+  "scripts": {
+    "test": "mocha __tests__/"
+  },
+  "author": "Artem Demo",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  }
+}
