@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { getAllMethodNames, exportPublicMethods, exportClass } = require('../methodsService');
+const { _getAllMethodNames, _exportPublicMethods, exportClass } = require('../methodsService');
 
 class SimpleClass {
     constructor(serviceA, serviceB) {

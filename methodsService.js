@@ -1,10 +1,11 @@
 /**
- * Return methids of given class instane
+ * Return array of method names of given class instane
  * 
  * @source https://stackoverflow.com/a/35033472
  * @param {Object} instanceObject - some class instane
+ * @private
  */
-const getAllMethodNames = (instanceObject) => {
+const _getAllMethodNames = (instanceObject) => {
     let _props = [];
     let _obj = instanceObject;
 
@@ -29,11 +30,13 @@ const getAllMethodNames = (instanceObject) => {
 }
 
 /**
+ * Return object with methods of given class instance
  * 
  * @param {Object} instanceObject - some class instane
+ * @private
  */
-const exportPublicMethods = (instanceObject) => {
-    const methodsList = getAllMethodNames(instanceObject);
+const _exportPublicMethods = (instanceObject) => {
+    const methodsList = _getAllMethodNames(instanceObject);
     return methodsList.reduce((acc, name) => {
         acc[name] = instanceObject[name].bind(instanceObject);
         return acc;
@@ -41,8 +44,11 @@ const exportPublicMethods = (instanceObject) => {
 }
 
 /**
- * 
- * @param {*} dependencies 
+ * Accepts list of dependencies and constructor function (class)
+ * and returns object with methods
+ *
+ * @param {*} dependencies
+ * @public
  */
 const exportClass = (...dependencies) => (OriginalClass) => {
     const classInstance = (() => {
@@ -53,11 +59,11 @@ const exportClass = (...dependencies) => (OriginalClass) => {
         }
         return new OriginalClass();
     })();
-    return exportPublicMethods(classInstance);
+    return _exportPublicMethods(classInstance);
 }
 
 module.exports = {
-    getAllMethodNames,
-    exportPublicMethods,
+    _getAllMethodNames,
+    _exportPublicMethods,
     exportClass,
 };
