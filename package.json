@@ -4,7 +4,7 @@
   "description": "Experiments with dependenci injections",
   "main": "null",
   "scripts": {
-    "test": "mocha __tests__/"
+    "test": "mocha __tests__/ **/__tests__"
   },
   "author": "Artem Demo",
   "license": "ISC",
