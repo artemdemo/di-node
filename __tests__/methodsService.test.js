@@ -7,6 +7,14 @@ class SimpleClass {
         this.serviceB = serviceB;
     }
 
+    // getter will not be exported
+    get getTest() {
+        return 'this is getter';
+    }
+
+    // setter will not be exported
+    set setTest(value) {}
+
     methodA() {
         return this.serviceA.toString();
     }
@@ -19,6 +27,10 @@ class SimpleClass {
 class ChildClass extends SimpleClass {
     constructor(serviceA, serviceB) {
         super(serviceA, serviceB);
+    }
+
+    methodB() {
+        return `${super.methodB()}-child`;
     }
 
     methodFoo() {
@@ -38,13 +50,13 @@ class ChildClassWithPrivates extends SimpleClass {
 
 const _serviceA = {
     toString() {
-        return 1;
+        return '1';
     }
 }
 
 const _serviceB = {
     toString() {
-        return 2;
+        return '2';
     }
 }
 
@@ -52,17 +64,17 @@ describe('methodsService', () => {
     describe('_getAllMethodNames', () => {
         it('should return list of methods (only) for simple class', () => {
             const simpleClass = new SimpleClass(_serviceA, _serviceB);
-            expect(_getAllMethodNames(simpleClass)).to.deep.equal(['methodA', 'methodB']);
+            expect(_getAllMethodNames(simpleClass)).to.have.all.members(['methodA', 'methodB']);
         });
 
         it('should return methods of parent class as well', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
-            expect(_getAllMethodNames(childClass)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
+            expect(_getAllMethodNames(childClass)).to.have.all.members(['methodA', 'methodB', 'methodFoo']);
         });
 
         it('should not provide private methods', () => {
             const privateClass = new ChildClassWithPrivates(_serviceA, _serviceB);
-            expect(_getAllMethodNames(privateClass)).to.deep.equal(['methodA', 'methodB']);
+            expect(_getAllMethodNames(privateClass)).to.have.all.members(['methodA', 'methodB']);
         });
     });
 
@@ -70,13 +82,13 @@ describe('methodsService', () => {
         it('should return object with methods of given instance', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
             const methodsObject = _exportPublicMethods(childClass);
-            expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
+            expect(Object.keys(methodsObject)).to.have.all.members(['methodA', 'methodB', 'methodFoo']);
         });
 
         it('method should operate in the conetext of original class', () => {
             const childClass = new ChildClass(_serviceA, _serviceB);
             const methodsObject = _exportPublicMethods(childClass);
-            expect(methodsObject.methodA()).to.equal(1);
+            expect(methodsObject.methodA()).to.equal('1');
         });
     });
 
@@ -87,8 +99,8 @@ describe('methodsService', () => {
                 _serviceB
             )(ChildClass);
 
-            expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
-            expect(methodsObject.methodB()).to.equal(2);
+            expect(Object.keys(methodsObject)).to.have.all.members(['methodA', 'methodB', 'methodFoo']);
+            expect(methodsObject.methodA()).to.equal('1');
         });
 
         it('dependencies could be provided as Array', () => {
@@ -97,8 +109,8 @@ describe('methodsService', () => {
                 _serviceB,
             ])(ChildClass);
 
-            expect(Object.keys(methodsObject)).to.deep.equal(['methodFoo', 'methodA', 'methodB']);
-            expect(methodsObject.methodB()).to.equal(2);
+            expect(Object.keys(methodsObject)).to.have.all.members(['methodA', 'methodB', 'methodFoo']);
+            expect(methodsObject.methodB()).to.equal('2-child');
         })
 
         it('should throw an error if not class given', () => {
